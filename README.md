@@ -34,20 +34,6 @@ The **Guard Rail NER system** is designed to:
 
 
 
-guard_rail_NER/
-│
-├── app/ # Application files
-├── data/ # Raw and processed datasets
-├── models/ # Trained models (CNN, Bi-LSTM, etc.)
-├── notebooks/ # Jupyter notebooks for experimentation
-├── main.py # Main execution script
-├── requirements.txt # Python dependencies
-├── README.md # Project documentation
-└── venv/ # Virtual environment
-
-
-
-
 ---
 
 ## 💻 Installation & Setup  
@@ -149,3 +135,53 @@ Docker – Containerization and deployment.
 
 ## 📁 File Structure  
 
+GUARD_RAIL_NER/
+│
+├── app/                                # Core application code
+│   ├── __pycache__/                     # Python cache files
+│   ├── resumes/                         # Uploaded resumes/documents
+│   ├── static/                          # Static assets for frontend
+│   │   └── style.css                    # CSS styling for chatbot UI
+│   ├── templates/                       # Frontend templates (Jinja2/FastAPI)
+│   │   └── index.html                   # Main HTML page for chatbot interface
+│   ├── __init__.py                      # Marks app/ as a package
+│   ├── chroma_client.py                 # ChromaDB client (vector database)
+│   ├── embedder.py                      # Embedding functions for documents
+│   ├── faiss_index.index                # FAISS vector DB index (local storage)
+│   ├── gemini_client.py                 # Google Gemini API client
+│   ├── guardrails.py                    # Guardrails (security & PII filtering)
+│   ├── main.py                          # Main FastAPI application entry
+│   ├── pdf_utils.py                     # PDF parsing & text extraction utils
+│   └── resume_texts.pkl                 # Pre-processed & serialized resume data
+│
+├── data/                                # Data handling layer
+│   └── resumes/                         # Resume dataset (raw files)
+│       └── read_resume.py               # Script to parse/process resumes
+│
+├── resumes/                             # (Optional) Folder for uploads
+│
+├── venv/                                # Python virtual environment
+│
+├── .env                                 # Environment variables (API keys, DB config)
+├── Dockerfile                           # Containerization config for deployment
+├── faiss_index.index                    # Root-level FAISS index (global DB)
+├── rebuild                              # (Possibly a build/output directory)
+├── requirements.txt                     # Python dependencies
+└── resume_texts.pkl                     # Root-level pickle file (resume data)
+
+✅ Observations:
+
+You have two copies of:
+
+faiss_index.index (one in app/, one in root)
+
+resume_texts.pkl (one in app/, one in root)
+👉 Better to keep only one (maybe in data/) for cleaner structure.
+
+main.py is the entry point → runs FastAPI backend.
+
+templates/index.html + static/style.css → gives you a basic UI for chatbot/resume upload.
+
+guardrails.py + pdf_utils.py + pii detection (if added later) → are your security & data processing layers.
+
+chroma_client.py + faiss_index.index + embedder.py → form your vector database + embedding pipeline.
